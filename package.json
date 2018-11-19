@@ -4,9 +4,13 @@
   "description": "Proxy classes over socket.io.",
   "main": "./src/index.js",
   "scripts": {
-    "pretest": "eslint --ignore-path .eslintignore",
-    "pretest:fix": "eslint --fix --ignore-path .eslintignore",
-    "test": "jest"
+    "test": "npm run lint && jest && npm run test:coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "test:local": "npm run lint && jest && npm run test:coverage",
+    "test:coverage": "jest --coverage",
+    "test:detailed": "jest --verbose",
+    "test:update": "jest -u",
+    "lint": "eslint --ignore-path .eslintignore",
+    "lint:fix": "eslint --fix --ignore-path .eslintignore"
   },
   "repository": {
     "type": "git",
@@ -30,6 +34,7 @@
     "socket.io": "^2.1.1"
   },
   "devDependencies": {
+    "coveralls": "^3.0.2",
     "eslint": "^5.9.0",
     "jest": "^23.6.0"
   }
