@@ -1,0 +1,36 @@
+{
+  "name": "soct",
+  "version": "1.0.0",
+  "description": "Proxy classes over socket.io.",
+  "main": "./src/index.js",
+  "scripts": {
+    "pretest": "eslint --ignore-path .eslintignore",
+    "pretest:fix": "eslint --fix --ignore-path .eslintignore",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jhenson29/node-soct.git"
+  },
+  "keywords": [
+    "socket",
+    "socket.io",
+    "soct",
+    "class",
+    "proxy",
+    "wrapper"
+  ],
+  "author": "Jeremy Henson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jhenson29/node-soct/issues"
+  },
+  "homepage": "https://github.com/jhenson29/node-soct#readme",
+  "dependencies": {
+    "socket.io": "^2.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.9.0",
+    "jest": "^23.6.0"
+  }
+}
