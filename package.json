@@ -1,6 +1,6 @@
 {
   "name": "soct",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Proxy classes over socket.io.",
   "main": "./src/index.js",
   "scripts": {
