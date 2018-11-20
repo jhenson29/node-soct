@@ -24,7 +24,7 @@ npm i -s soct
 ```
 
 ## Getting Started
-### Class to proxy.
+### Class to proxy
 ```javascript
 // foo.js
 

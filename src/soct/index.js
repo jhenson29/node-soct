@@ -3,7 +3,6 @@ const _emit = Symbol('emit');
 
 const OPTIONDEFAULT = {
 	host: 'http://localhost',
-	async: false,
 };
 
 /**
@@ -21,7 +20,6 @@ class Soct{
 		port,
 		{
 			host = OPTIONDEFAULT.host,
-			async = OPTIONDEFAULT.async,
 		} = OPTIONDEFAULT
 	){ 
 		this[_socket] = require('socket.io-client')(`${host}:${port}`);
@@ -30,7 +28,7 @@ class Soct{
 			
 			// map a method
 			if (typeof testObj[prop] === 'function')
-				this[prop] = async (...args) => async ? this[_emit](prop,[...args]) : await this[_emit](prop,[...args]);
+				this[prop] = async (...args) => this[_emit](prop,[...args]);
 
 			// map a property
 			else {
@@ -38,8 +36,8 @@ class Soct{
 					this, 
 					prop, 
 					{
-						get: async () => async ? this[_emit](prop) : await this[_emit](prop),
-						set: async args => async ? this[_emit](prop,args) : await this[_emit](prop, args)
+						get: () => this[_emit](prop),
+						set: args => this[_emit](prop,args)
 					}
 				);
 			}
