@@ -1,7 +1,16 @@
 <div align="center"><p>
-<a href="https://travis-ci.org/jhenson29/node-soct"><img src="https://travis-ci.org/jhenson29/node-soct.svg?branch=master"/></a>
-<img src="https://img.shields.io/badge/license-MIT-brightgreen.svg"/>
-<a href="https://coveralls.io/github/jhenson29/node-soct?branch=master"><img src="https://coveralls.io/repos/github/jhenson29/node-soct/badge.svg?branch=master"/></a>
+
+<a href="https://github.com/jhenson29/node-soct/blob/master/LICENSE">
+<img src="https://img.shields.io/badge/license-MIT-brightgreen.svg"/></a>
+
+<a href="https://travis-ci.org/jhenson29/node-soct">
+<img src="https://travis-ci.org/jhenson29/node-soct.svg?branch=master"/></a>
+
+<a href="https://coveralls.io/github/jhenson29/node-soct?branch=master">
+<img src="https://coveralls.io/repos/github/jhenson29/node-soct/badge.svg?branch=master"/></a>
+
+<a href="https://snyk.io/test/github/jhenson29/node-soct?targetFile=package.json">
+<img src="https://snyk.io/test/github/jhenson29/node-soct/badge.svg?targetFile=package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/jhenson29/node-soct?targetFile=package.json" style="max-width:100%;"></a>
 </p></div>
 
 # Node Soct

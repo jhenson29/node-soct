@@ -1,3 +1,7 @@
+const OPTIONDEFAULT = {
+	delayedStart: false
+};
+
 /**
  * socket-io service wrapper
  */
@@ -12,37 +16,36 @@ class SocktService{
 		service,
 		port,
 		{
-			delayedStart = false
-		}
+			delayedStart = OPTIONDEFAULT.delayedStart
+		} = OPTIONDEFAULT
 	){ 
-		this.port = port; 
-		this.io = require('socket.io')();
-        
-		this.io.on('connection', socket => { 
+		this.state = {
+			port,
+			io: require('socket.io')(),
+		};
+
+		this.state.io.on('connection', socket => { 
 			socket.on('__sockt_register_event_listener__', prop => {
-				service.on(prop, args => socket.emit(prop, args));
+				service.on(prop, (...args) => socket.emit(prop, [...args]));
 			});
 			Object.getOwnPropertyNames(Object.getPrototypeOf(service)).forEach( prop => {
 				socket.on(prop, async (args, cb) => { 
-					if(typeof service[prop] === 'function')
-						return cb(await service[prop](args));
-					else {
-						if(args !== null)                       
-							return cb(await (service[prop] = args));
-						else
-							return cb(await (service[prop]));
-					}});
+					// map methods and properties
+					return typeof service[prop] === 'function' ? cb(await service[prop](...args)) : args === null ? cb(await (service[prop])) : cb(await (service[prop] = args));
+				});
 			});});
         
 		if(!delayedStart)
-			this.io.listen(this.port);
+			this.start();
 	}
 
 	/**
      * start the socket.io service (if delayed start)
+	 * @public
      */
 	start(){
-		this.io.listen(this.port);
+		const { io, port } = this.state;
+		io.listen(port);
 	}
 }
 

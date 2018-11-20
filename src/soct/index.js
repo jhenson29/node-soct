@@ -1,7 +1,13 @@
-const socket = Symbol('socket');
+const _socket = Symbol('socket');
+const _emit = Symbol('emit');
+
+const OPTIONDEFAULT = {
+	host: 'http://localhost',
+	async: false,
+};
 
 /**
- * Sockt service client wrapper
+ * Soct proxy class
  */
 class Soct{
 	/**
@@ -13,21 +19,27 @@ class Soct{
 	constructor(
 		service,
 		port,
-		host = 'http://localhost',
+		{
+			host = OPTIONDEFAULT.host,
+			async = OPTIONDEFAULT.async,
+		} = OPTIONDEFAULT
 	){ 
-		this[socket] = require('socket.io-client')(`${host}:${port}`);
+		this[_socket] = require('socket.io-client')(`${host}:${port}`);
 		const testObj = new service();
 		Object.getOwnPropertyNames(service.prototype).forEach( prop => {
-            
+			
+			// map a method
 			if (typeof testObj[prop] === 'function')
-				this[prop] = args => new Promise( resolve => this[socket].emit(prop, args, cb => resolve(cb)));
+				this[prop] = async (...args) => async ? this[_emit](prop,[...args]) : await this[_emit](prop,[...args]);
+
+			// map a property
 			else {
 				Object.defineProperty(
 					this, 
 					prop, 
 					{
-						get: () => new Promise( resolve => this[socket].emit(prop, null, cb => resolve(cb))),
-						set: (args) => new Promise( resolve => this[socket].emit(prop, args, cb => resolve(cb)))
+						get: async () => async ? this[_emit](prop) : await this[_emit](prop),
+						set: async args => async ? this[_emit](prop,args) : await this[_emit](prop, args)
 					}
 				);
 			}
@@ -36,12 +48,26 @@ class Soct{
 
 	/**
      * add an event listener
+	 * @public
      * @param {string} name 
      * @param {function} func 
      */
 	on(name, func){
-		this[socket].emit('__sockt_register_event_listener__',name);
-		this[socket].on(name, args => func(args));
+		this[_socket].emit('__sockt_register_event_listener__',name);
+		this[_socket].on(name, args => func(args));
+	}
+
+	/**
+	 * emit map
+	 * @private
+	 * @param {string} prop 
+	 * @param {any} args 
+	 */
+	[_emit](
+		prop,
+		args
+	){
+		return new Promise( resolve => this[_socket].emit(prop, args, cb => resolve(cb)));
 	}
 }
 
