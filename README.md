@@ -31,18 +31,22 @@ npm i -s soct
 class Foo{
     constructor(){
         this.state = {
-            bar: true;
+            bar: true
         }
     }
-
-    get bar() { return this.state.bar}
-    set bar(val) {this.state.bar = val}
+ 
+    get bar() { 
+        return this.state.bar
+    }
+    set bar(val) { 
+        this.state.bar = val
+    }
 
     baz(val){
-        return val * 2;
+        return val * 2
     }
 }
-
+ 
 module.exports = Foo;
 ```
 
@@ -52,7 +56,7 @@ module.exports = Foo;
 
 const { SoctService } = require('soct');
 const Foo = require('./foo');
-
+ 
 new SoctService(
     new Foo(),  // class to proxy; must be an instance of the class
     5000        // port to proxy on
@@ -65,15 +69,19 @@ new SoctService(
 
 const { Soct } = require('soct');
 const Foo = require('./foo');
-
+ 
 const foo = new Soct(
     Foo,    // class definition
     5000    // port to proxy on (matches previous service)
 )
 
-console.log(foo.bar);       // => true
-foo.bar = false;
-console.log(foo.bar);       // => false
-console.log(foo.baz(5));     // => 10
+const run = async() => {
+    console.log(await foo.bar);       // => true
+    foo.bar = false;
+    console.log(await foo.bar);       // => false
+    console.log(await foo.baz(5));    // => 10
+}
+
+run();
 
 ```
