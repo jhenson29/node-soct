@@ -25,18 +25,15 @@ test('it maps property to soct', () => {
 
 test('it maps method to soct', () => {
 	const soct = new Soct(foo, 0);
-
 	expect(soct).toHaveProperty('baz');
 });
 
 test('it maps a property as property', () => {
 	const soct = new Soct(foo, 0);
-	console.log(typeof soct.bar);
 	expect(typeof soct.bar).toEqual('object');
 });
 
 test('it maps a method as method', () => {
 	const soct = new Soct(foo, 0);
-	console.log(typeof soct.baz);
 	expect(typeof soct.baz).toEqual('function');
 });

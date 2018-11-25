@@ -60,11 +60,14 @@ class Soct{
 	[_mapClass](
 		service
 	){
-		const testObj = new service();
 		Object.getOwnPropertyNames(service.prototype).forEach( prop => {
-			
 			// map a method
-			if (typeof testObj[prop] === 'function')
+			let isFunction = false;
+			try{
+				isFunction = typeof service.prototype[prop] === 'function';
+			}catch(err){isFunction = !err;}
+
+			if (isFunction)
 				this[prop] = async (...args) => this[_emit](prop,[...args]);
 
 			// map a property
