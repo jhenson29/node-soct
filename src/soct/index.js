@@ -1,5 +1,10 @@
-const _socket = Symbol('socket');
+const uuid = require('uuid/v4');
+
+const _state = Symbol('state');
+const _mapClass = Symbol('mapClass');
+const _registerListenOnConnection = Symbol('registerListenOnConnection');
 const _emit = Symbol('emit');
+const _registerListener = Symbol('registerListener');
 
 const OPTIONDEFAULT = {
 	host: 'http://localhost',
@@ -11,9 +16,9 @@ const OPTIONDEFAULT = {
 class Soct{
 	/**
      * 
-     * @param {object function} service // class or function to wrap
+     * @param {object} service // class to wrap
      * @param {number} port // port number for service
-     * @param {string} host // host connection string for service
+     * @param {object} options // options
      */
 	constructor(
 		service,
@@ -22,7 +27,39 @@ class Soct{
 			host = OPTIONDEFAULT.host,
 		} = OPTIONDEFAULT
 	){ 
-		this[_socket] = require('socket.io-client')(`${host}:${port}`);
+		this[_state] = {
+			socket:  require('socket.io-client')(`${host}:${port}`),
+			eventListeners: []
+		};
+
+		this[_mapClass](service);
+		this[_registerListenOnConnection]();
+	}
+
+	/**
+     * add an event listener
+	 * @public
+     * @param {string} name 
+     * @param {function} func 
+     */
+	on(name, func){
+		const { socket, eventListeners } = this[_state];
+		const listener = {
+			name,
+			id: uuid()
+		};
+		eventListeners.push(listener);
+		this[_registerListener](listener);
+		socket.on(name, args => func(args));
+	}
+
+	/**
+	 * map the class to this instance of soct
+	 * @param {object} service 
+	 */
+	[_mapClass](
+		service
+	){
 		const testObj = new service();
 		Object.getOwnPropertyNames(service.prototype).forEach( prop => {
 			
@@ -45,14 +82,13 @@ class Soct{
 	}
 
 	/**
-     * add an event listener
-	 * @public
-     * @param {string} name 
-     * @param {function} func 
-     */
-	on(name, func){
-		this[_socket].emit('__sockt_register_event_listener__',name);
-		this[_socket].on(name, args => func(args));
+	 * register 'listen on connection'
+	 */
+	[_registerListenOnConnection](){
+		const { socket } = this[_state];
+		socket.on('__soct_new_connection__', () => {
+			this[_state].eventListeners.forEach( listener => this[_registerListener](listener));
+		});
 	}
 
 	/**
@@ -65,7 +101,19 @@ class Soct{
 		prop,
 		args
 	){
-		return new Promise( resolve => this[_socket].emit(prop, args, cb => resolve(cb)));
+		const { socket } = this[_state];
+		return new Promise( resolve => socket.emit(prop, args, cb => resolve(cb)));
+	}
+
+	/**
+	 * register listener with socket
+	 * @param {string} name 
+	 */
+	[_registerListener](
+		listener
+	){
+		const { socket } = this[_state];
+		socket.emit('__soct_register_event_listener__', listener);
 	}
 }
 

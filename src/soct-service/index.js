@@ -22,11 +22,18 @@ class SocktService{
 		this.state = {
 			port,
 			io: require('socket.io')(),
+			listeners: {},
 		};
 
+		const { listeners } = this.state;
 		this.state.io.on('connection', socket => { 
-			socket.on('__sockt_register_event_listener__', prop => {
-				service.on(prop, (...args) => socket.emit(prop, [...args]));
+			listeners[socket.id] = [];
+			socket.emit('__soct_new_connection__');
+			socket.on('__soct_register_event_listener__', ({ name, id }) => {
+				if(!listeners[socket.id].includes(id)){
+					listeners[socket.id].push(id);
+					service.on(name, (...args) => socket.emit(name, [...args]));
+				}
 			});
 			Object.getOwnPropertyNames(Object.getPrototypeOf(service)).forEach( prop => {
 				socket.on(prop, async (args, cb) => { 
