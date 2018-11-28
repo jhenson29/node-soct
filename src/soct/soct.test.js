@@ -14,7 +14,7 @@ class foo{
 	}
 
 	baz(){
-		return true;
+		return 42;
 	}
 }
 

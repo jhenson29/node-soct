@@ -46,7 +46,7 @@ class Soct{
 		const { socket, eventListeners } = this[_state];
 		const listener = {
 			name,
-			id: uuid()
+			uuid: uuid()
 		};
 		eventListeners.push(listener);
 		this[_registerListener](listener);

@@ -21,18 +21,34 @@ class SocktService{
 	){ 
 		this.state = {
 			port,
-			io: require('socket.io')(),
-			listeners: {},
+			io: require('socket.io')()
 		};
 
-		const { listeners } = this.state;
+		const listeners = {};
+		const functions = {};
+
 		this.state.io.on('connection', socket => { 
-			listeners[socket.id] = [];
+			const { id } = socket;
+			listeners[id] = [];
+			functions[id] = [];
 			socket.emit('__soct_new_connection__');
-			socket.on('__soct_register_event_listener__', ({ name, id }) => {
-				if(!listeners[socket.id].includes(id)){
-					listeners[socket.id].push(id);
-					service.on(name, (...args) => socket.emit(name, [...args]));
+			socket.on('__soct_register_event_listener__', ({ name, uuid }) => {
+				if(!listeners[socket.id].includes(uuid)){
+					const func = (...args) => socket.emit(name, [...args]);
+					listeners[id].push(uuid);
+					functions[id].push({
+						name,
+						func
+					});
+					service.on(name, func);
+				}
+			});
+
+			socket.on('disconnect', () =>{
+				if(listeners[id]){
+					functions[id].forEach( listener => service.removeListener(listener.name, listener.func));
+					delete listeners[id];
+					delete functions[id];
 				}
 			});
 			Object.getOwnPropertyNames(Object.getPrototypeOf(service)).forEach( prop => {
