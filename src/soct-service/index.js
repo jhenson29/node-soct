@@ -34,7 +34,7 @@ class SocktService{
 			socket.emit('__soct_new_connection__');
 			socket.on('__soct_register_event_listener__', ({ name, uuid }) => {
 				if(!listeners[socket.id].includes(uuid)){
-					const func = (...args) => socket.emit(name, [...args]);
+					const func = args => socket.emit(name, args);
 					listeners[id].push(uuid);
 					functions[id].push({
 						name,
@@ -63,12 +63,21 @@ class SocktService{
 	}
 
 	/**
-     * start the socket.io service (if delayed start)
+     * start the socket.io service (if delayed start or stopped)
 	 * @public
      */
 	start(){
 		const { io, port } = this.state;
 		io.listen(port);
+	}
+
+	/**
+	 * stop the socket.io service
+	 * @public
+	 */
+	stop(){
+		const { io } = this.state;
+		io.close();
 	}
 }
 
