@@ -31,12 +31,12 @@
   },
   "homepage": "https://github.com/jhenson29/node-soct#readme",
   "dependencies": {
-    "socket.io": "^2.1.1",
-    "uuid": "^3.3.2"
+    "socket.io": "^2.3.0",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "coveralls": "^3.0.2",
-    "eslint": "^5.9.0",
-    "jest": "^23.6.0"
+    "coveralls": "^3.0.9",
+    "eslint": "^6.7.1",
+    "jest": "^24.9.0"
   }
 }
