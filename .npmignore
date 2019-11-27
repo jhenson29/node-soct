@@ -1,0 +1,30 @@
+# Logs
+logs
+*.log
+
+# Test directory
+tests/
+
+# Source directory
+src/
+
+# Dependency directories
+node_modules/
+
+# Coverage
+coverage/
+
+# Other
+_config.yml
+.eslintignore
+.eslintrc.js
+.gitignore
+.npmignore
+.travis.yml
+jest.config.js
+tsconfig.json
+.vscode
+
+# other
+*.localtest.js
+

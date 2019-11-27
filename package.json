@@ -1,42 +1,63 @@
 {
-  "name": "soct",
-  "version": "1.1.2",
-  "description": "Proxy classes over socket.io.",
-  "main": "./src/index.js",
-  "scripts": {
-    "test": "npm run lint && jest && npm run test:coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "test:local": "npm run lint && jest && npm run test:coverage",
-    "test:coverage": "jest --coverage",
-    "test:detailed": "jest --verbose",
-    "test:update": "jest -u",
-    "lint": "eslint --ignore-path .eslintignore",
-    "lint:fix": "eslint --fix --ignore-path .eslintignore"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jhenson29/node-soct.git"
-  },
-  "keywords": [
-    "socket",
-    "socket.io",
-    "soct",
-    "class",
-    "proxy",
-    "wrapper"
-  ],
-  "author": "Jeremy Henson",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/jhenson29/node-soct/issues"
-  },
-  "homepage": "https://github.com/jhenson29/node-soct#readme",
-  "dependencies": {
-    "socket.io": "^2.3.0",
-    "uuid": "^3.3.3"
-  },
-  "devDependencies": {
-    "coveralls": "^3.0.9",
-    "eslint": "^6.7.1",
-    "jest": "^24.9.0"
-  }
+    "name": "soct",
+    "version": "1.1.2",
+    "description": "Proxy classes over socket.io.",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "build": "npm run test:local && npm run build:dev",
+        "build:dev": "npm run clean && tsc",
+        "clean": "rm -rf ./dist",
+        "test": "npm run lint && jest && npm run test:coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+        "test:local": "npm run lint && jest && npm run test:coverage",
+        "test:coverage": "jest --coverage",
+        "test:detailed": "jest --verbose",
+        "test:update": "jest -u",
+        "preversion": "npm run build",
+        "lint": "eslint --ignore-path .eslintignore",
+        "lint:fix": "eslint --fix --ignore-path .eslintignore"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jhenson29/node-soct.git"
+    },
+    "keywords": [
+        "socket",
+        "socket.io",
+        "soct",
+        "class",
+        "proxy",
+        "wrapper"
+    ],
+    "author": "Jeremy Henson",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/jhenson29/node-soct/issues"
+    },
+    "homepage": "https://github.com/jhenson29/node-soct#readme",
+    "dependencies": {
+        "socket.io": "^2.3.0",
+        "uuid": "^3.3.3"
+    },
+    "devDependencies": {
+        "@types/jest": "^24.0.23",
+        "@types/node": "^12.12.14",
+        "@types/socket.io": "^2.1.4",
+        "@types/socket.io-client": "^1.4.32",
+        "@types/uuid": "^3.4.6",
+        "@typescript-eslint/eslint-plugin": "^2.9.0",
+        "@typescript-eslint/parser": "^2.9.0",
+        "coveralls": "^3.0.9",
+        "eslint": "^6.7.1",
+        "jest": "^24.9.0",
+        "ts-jest": "^24.2.0",
+        "typescript": "^3.7.2"
+    },
+    "prettier": {
+        "bracketSpacing": false,
+        "printWidth": 120,
+        "singleQuote": false,
+        "tabWidth": 4,
+        "trailingComma": "all"
+    }
 }

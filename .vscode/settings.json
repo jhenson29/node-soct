@@ -1,0 +1,11 @@
+{
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#070"
+    },
+    "editor.formatOnSave": true,
+    "cSpell.words": [
+        "create",
+        "server",
+        "soct"
+    ]
+}

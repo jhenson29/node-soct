@@ -17,6 +17,8 @@
 
 Proxy classes over socket.io.
 
+## Version 2.x.x w/ TypeScript!
+
 ## Install
 
 ```javascript
@@ -24,64 +26,67 @@ npm i -s soct
 ```
 
 ## Getting Started
+
 ### Class to proxy
+
 ```javascript
 // foo.js
 
-class Foo{
-    constructor(){
+class Foo {
+    constructor() {
         this.state = {
-            bar: true
-        }
-    }
- 
-    get bar() { 
-        return this.state.bar
-    }
-    set bar(val) { 
-        this.state.bar = val
+            bar: true,
+        };
     }
 
-    baz(val){
-        return val * 2
+    get bar() {
+        return this.state.bar;
+    }
+    set bar(val) {
+        this.state.bar = val;
+    }
+
+    baz(val) {
+        return val * 2;
     }
 }
- 
+
 module.exports = Foo;
 ```
 
 ### New Foo Service
+
 ```javascript
 //service.js
 
-const { SoctService } = require('soct');
-const Foo = require('./foo');
- 
-new SoctService(
-    new Foo(),  // class to proxy; must be an instance of the class
-    5000        // port to proxy on
-)
+const {createSoctServer} = require("soct");
+const Foo = require("./foo");
+
+createSoctServer(
+    new Foo(), // class to proxy; must be an instance of the class
+    5000, // port to proxy on
+);
 ```
 
 ### Use Foo Proxy
+
 ```javascript
 // app.js
 
-const { Soct } = require('soct');
-const Foo = require('./foo');
- 
-const foo = new Soct(
-    Foo,    // class definition
-    5000    // port to proxy on (matches previous service)
-)
+const {createSoctClient} = require("soct");
+const Foo = require("./foo");
 
-const run = async() => {
-    console.log(await foo.bar);       // => true
+const foo = createSoctClient(
+    Foo, // class definition
+    5000, // port to proxy on (matches previous service)
+);
+
+const run = async () => {
+    console.log(await foo.bar); // => true
     foo.bar = false;
-    console.log(await foo.bar);       // => false
-    console.log(await foo.baz(5));    // => 10
-}
+    console.log(await foo.bar); // => false
+    console.log(await foo.baz(5)); // => 10
+};
 
 run();
-
 ```
